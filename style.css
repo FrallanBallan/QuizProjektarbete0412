@@ -24,11 +24,14 @@ img {
     position: absolute;
 }
 
+
 .mainWrap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+    height: 100vh;
+    justify-content: center;
+    gap: 10rem;
 
     border: solid black 2px;
 
@@ -36,6 +39,7 @@ img {
 
 .quizWrap {
     border: solid white 2px;
+    
 }
 
 .cardWrap {
