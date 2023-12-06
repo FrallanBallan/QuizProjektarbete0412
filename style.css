@@ -71,6 +71,7 @@ body {
 
 .quizCard {
     display: flex;
+    flex-direction: column;
     align-items: center;
      border: 1px solid red;
     padding: 2.4rem;
@@ -81,7 +82,7 @@ body {
 .quizCard:hover {
     background-color: var(--primaryBg);
     backdrop-filter: blur(10px);
-    scale: 2.03;
+    scale: 1.53;
 }
 /* MUSEFFEKT */
 .lightMouse {

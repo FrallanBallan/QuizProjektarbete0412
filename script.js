@@ -113,6 +113,7 @@ startButton.addEventListener("click", () => {
   questionCounter = 0;
   results = 0;
   getNextQuestion();
+  quizCards.style.backgroundColor = "";
 });
 
 // Funktion som visar frågan baserad på if satser och skapar en div
@@ -178,6 +179,7 @@ function checkAnswer(question, selectedAnswer) {
 }
 
 function displayResult() {
+  let percentAnswers = (results / fizzyDrinks.length) * 100;
   quizCards.innerHTML = `
     <h2>Quiz Complete!</h2>
     <p>You scored ${results} out of ${fizzyDrinks.length}.</p>
@@ -185,8 +187,14 @@ function displayResult() {
   startButton.style.display = "block";
   startButton.innerHTML = "Fizz Again";
   nextButton.style.display = "none";
+  if (percentAnswers <= 50) {
+    quizCards.style.backgroundColor = "red";
+  } else if (percentAnswers <= 75) {
+    quizCards.style.backgroundColor = "orange";
+  } else if (percentAnswers >= 100) {
+    quizCards.style.backgroundColor = "green";
+  }
 }
-
 //funktion för next question
 function getNextQuestion() {
   // questionCounter++;
