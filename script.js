@@ -94,7 +94,7 @@ console.log(fizzyDrinks[3]);
 //Variablar
 
 let quizCards = document.querySelector(".cardWrap");
-
+let newDiv = document.createElement("div");
 //Question Counter
 let results = 0;
 let questionCounter = 0;
@@ -127,15 +127,17 @@ function displayQuestion(question) {
   startButton.style.display = "none";
   // if sats för att hitta om frågan har en viss typ
   if (question.type === "trueFalse") {
-    let trueFalseBtns = document.createElement("div");
+    newDiv.innerHTML = "";
     question.answer.forEach((answer) => {
       let button = document.createElement("button");
       button.innerText = answer;
       button.addEventListener("click", () => checkAnswer(question, answer));
-      trueFalseBtns.appendChild(button);
+      newDiv.appendChild(button);
+      console.log(newDiv);
     });
-    quizDiv.appendChild(trueFalseBtns);
-  } else if (question.type === "radio" || question.type === "checkbox") {
+    quizDiv.appendChild(newDiv);
+  } else {
+    newDiv.innerHTML = "";
     question.answer.forEach((answer) => {
       let input = document.createElement("input");
       input.type = question.type;
@@ -148,8 +150,10 @@ function displayQuestion(question) {
 
       label.appendChild(input);
       label.appendChild(document.createTextNode(answer));
-      quizDiv.appendChild(label);
+      newDiv.appendChild(label);
+      console.log(newDiv);
     });
+    quizDiv.appendChild(newDiv);
   }
 
   //Funktion skapar knapp och rensar dom och appendar ny quizDiv
@@ -163,6 +167,12 @@ function checkAnswer(question, selectedAnswer) {
     results++;
   }
   questionCounter++;
+  if (!newDiv.firstChild.innerHTML.includes("checkbox")) {
+    Array.from(newDiv.children).forEach((child) => {
+      child.classList.add("disabled");
+    });
+    console.log(results);
+  }
 
   nextButton.style.display = "block";
 }

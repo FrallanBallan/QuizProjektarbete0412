@@ -71,9 +71,9 @@ body {
 
 .quizCard {
     display: flex;
-        align-items: center;
-        border: 1px solid red;
-        padding: 2.4rem;
+    align-items: center;
+     border: 1px solid red;
+    padding: 2.4rem;
         gap: 2.4rem;
         transition: backround-color 200ms ease, backdrop-filter 175ms ease, scale 350ms ease;
 }
@@ -92,4 +92,9 @@ body {
     top: 0;
     background: var(--mouseLight);
     z-index: -1;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.1;
 }
