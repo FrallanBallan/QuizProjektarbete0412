@@ -99,101 +99,189 @@ let quizCards = document.querySelector(".cardWrap");
 let results = 0;
 let questionCounter = 0;
 
-//Knappar
+//Start knapp
+let startButton = document.querySelector("#startQuizBtn");
 
-document
-  .querySelector("#startQuizBtn")
-  .addEventListener("click", getNextQuestion);
+//Next knapp
+let nextButton = document.querySelector("#nextButton");
 
-function getNextQuestion() {
-  // let randomQuestion = getRandomQuestion();
-  fizzyDrinks.forEach((randomQuestion) => {
-    constructQuizCard(randomQuestion);
-    if (randomQuestion.type === "trueFalse") {
-      getTrueFalse(randomQuestion);
-    } else if (randomQuestion.type === "radio") {
-      getRadio(randomQuestion);
-    } else {
-      getCheck(randomQuestion);
-    }
-  });
-}
+nextButton.addEventListener("click", getNextQuestion);
+nextButton.style.display = "none";
 
-//Funktioner
+// Starta quiz
+startButton.addEventListener("click", () => {
+  questionCounter = 0;
+  results = 0;
+  getNextQuestion();
+});
 
-let constructQuizCard = (questions) => {
+// Funktion som visar frågan baserad på if satser och skapar en div
+function displayQuestion(question) {
   let quizDiv = document.createElement("div");
   quizDiv.classList.add("quizCard");
-  quizDiv.innerText = `
-    Name: ${questions.name}
-    Question: ${questions.question}
-    `;
+  quizDiv.innerHTML = `
+    <h3>${question.name}</h3>
+    <p>${question.question}</p>
+  `;
+  nextButton.style.display = "none";
+  startButton.style.display = "none";
+  // if sats för att hitta om frågan har en viss typ
+  if (question.type === "trueFalse") {
+    let trueFalseBtns = document.createElement("div");
+    question.answer.forEach((answer) => {
+      let button = document.createElement("button");
+      button.innerText = answer;
+      button.addEventListener("click", () => checkAnswer(question, answer));
+      trueFalseBtns.appendChild(button);
+    });
+    quizDiv.appendChild(trueFalseBtns);
+  } else if (question.type === "radio" || question.type === "checkbox") {
+    question.answer.forEach((answer) => {
+      let input = document.createElement("input");
+      input.type = question.type;
+      input.name = question.name;
+      input.value = answer;
+      input.addEventListener("click", () => checkAnswer(question, answer));
+
+      // label
+      let label = document.createElement("label");
+
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(answer));
+      quizDiv.appendChild(label);
+    });
+  }
+
+  //Funktion skapar knapp och rensar dom och appendar ny quizDiv
+
   quizCards.innerHTML = "";
-  quizCards.append(quizDiv);
-};
-
-function getTrueFalse(question) {
-  console.log(question);
-  question.answer.forEach((answer) => {
-    console.log(answer);
-    let trueFalseBtn = document.createElement("button");
-    trueFalseBtn.innerHTML = answer;
-    quizCards.appendChild(trueFalseBtn);
-    //Kallar på funktion
-    trueFalseBtn.addEventListener("click", (e) =>
-      checkAnswer(e, question, answer)
-    );
-  });
+  quizCards.appendChild(quizDiv);
 }
 
-function getRadio(question) {
-  question.answer.forEach((answer) => {
-    let radioBtn = document.createElement("input");
-    let radioLabel = document.createElement("label");
-    radioBtn.type = "radio";
-    radioBtn.name = "Funkdoobiest";
-    radioBtn.value = answer;
-
-    radioLabel.appendChild(radioBtn);
-    radioLabel.appendChild(document.createTextNode(answer));
-    quizCards.appendChild(radioLabel);
-
-    radioBtn.addEventListener("click", (e) => checkAnswer(e, question, answer));
-  });
-}
-
-function getCheck(question) {
-  question.answer.forEach((answer) => {
-    let checkBoxes = document.createElement("input");
-    let checkBoxLabel = document.createElement("label");
-    checkBoxes.type = "checkbox";
-    checkBoxes.name = "DankMcDough";
-    checkBoxes.value = answer;
-
-    checkBoxLabel.appendChild(checkBoxes);
-    checkBoxLabel.appendChild(document.createTextNode(answer));
-    quizCards.appendChild(checkBoxLabel);
-
-    checkBoxes.addEventListener("click", (e) =>
-      checkAnswer(e, question, answer)
-    );
-  });
-}
-
-function removeQuestion(question) {
-  fizzyDrinks = fizzyDrinks.filter((item) => item !== question);
-}
-
-function checkAnswer(e, question, selectedAnswer) {
-  console.log(e, question.rigthAnswer, selectedAnswer);
+function checkAnswer(question, selectedAnswer) {
   if (question.rigthAnswer.includes(selectedAnswer)) {
     results++;
-    console.log("Current points" + results);
   }
-  getNextQuestion();
-  console.log(results);
-  console.log(questionCounter);
+  questionCounter++;
+
+  nextButton.style.display = "block";
 }
+
+function displayResult() {
+  quizCards.innerHTML = `
+    <h2>Quiz Complete!</h2>
+    <p>You scored ${results} out of ${fizzyDrinks.length}.</p>
+  `;
+  startButton.style.display = "block";
+  startButton.innerHTML = "Fizz Again";
+  nextButton.style.display = "none";
+}
+
+//funktion för next question
+function getNextQuestion() {
+  // questionCounter++;
+  if (questionCounter < fizzyDrinks.length) {
+    displayQuestion(fizzyDrinks[questionCounter]);
+  } else {
+    displayResult();
+  }
+}
+
+// // FÖRSTA TRY
+// document
+//   .querySelector("#startQuizBtn")
+//   .addEventListener("click", getNextQuestion);
+
+// function getNextQuestion() {
+//   // let randomQuestion = getRandomQuestion();
+//   fizzyDrinks.forEach((randomQuestion) => {
+//     constructQuizCard(randomQuestion);
+//     if (randomQuestion.type === "trueFalse") {
+//       getTrueFalse(randomQuestion);
+//     } else if (randomQuestion.type === "radio") {
+//       getRadio(randomQuestion);
+//     } else {
+//       getCheck(randomQuestion);
+//     }
+//   });
+// }
+
+// //Funktioner
+
+// let constructQuizCard = (questions) => {
+//   let quizDiv = document.createElement("div");
+//   quizDiv.classList.add("quizCard");
+//   quizDiv.innerText = `
+//     Name: ${questions.name}
+//     Question: ${questions.question}
+//     `;
+//   quizCards.innerHTML = "";
+//   quizCards.append(quizDiv);
+// };
+
+// function getTrueFalse(question) {
+//   console.log(question);
+//   question.answer.forEach((answer) => {
+//     console.log(answer);
+//     let trueFalseBtn = document.createElement("button");
+//     trueFalseBtn.innerHTML = answer;
+//     quizCards.appendChild(trueFalseBtn);
+//     //Kallar på funktion
+//     trueFalseBtn.addEventListener("click", (e) =>
+//       checkAnswer(e, question, answer)
+//     );
+//   });
+// }
+
+// function getRadio(question) {
+//   question.answer.forEach((answer) => {
+//     let radioBtn = document.createElement("input");
+//     let radioLabel = document.createElement("label");
+//     radioBtn.type = "radio";
+//     radioBtn.name = "Funkdoobiest";
+//     radioBtn.value = answer;
+
+//     radioLabel.appendChild(radioBtn);
+//     radioLabel.appendChild(document.createTextNode(answer));
+//     quizCards.appendChild(radioLabel);
+
+//     radioBtn.addEventListener("click", (e) => checkAnswer(e, question, answer));
+//   });
+// }
+
+// function getCheck(question) {
+//   question.answer.forEach((answer) => {
+//     let checkBoxes = document.createElement("input");
+//     let checkBoxLabel = document.createElement("label");
+//     checkBoxes.type = "checkbox";
+//     checkBoxes.name = "DankMcDough";
+//     checkBoxes.value = answer;
+
+//     checkBoxLabel.appendChild(checkBoxes);
+//     checkBoxLabel.appendChild(document.createTextNode(answer));
+//     quizCards.appendChild(checkBoxLabel);
+
+//     checkBoxes.addEventListener("click", (e) =>
+//       checkAnswer(e, question, answer)
+//     );
+//   });
+// }
+
+// function removeQuestion(question) {
+//   fizzyDrinks = fizzyDrinks.filter((item) => item !== question);
+// }
+
+// function checkAnswer(e, question, selectedAnswer) {
+//   console.log(e, question.rigthAnswer, selectedAnswer);
+//   if (question.rigthAnswer.includes(selectedAnswer)) {
+//     results++;
+//     console.log("Current points" + results);
+//   }
+//   getNextQuestion();
+//   console.log(results);
+//   console.log(questionCounter);
+// }
+// //FÖRSTA TRY
 
 //Exempel
 // {
