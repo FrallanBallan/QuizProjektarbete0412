@@ -97,12 +97,17 @@ let quizCards = document.querySelector(".cardWrap");
 
 //Question Counter
 let results = 0;
+let questionCounter = 0;
 
 //Knappar
 
-document.querySelector("#startQuizBtn").addEventListener("click", () => {
-  if (fizzyDrinks.length > 0) {
-    let randomQuestion = getRandomQuestion();
+document
+  .querySelector("#startQuizBtn")
+  .addEventListener("click", getNextQuestion);
+
+function getNextQuestion() {
+  // let randomQuestion = getRandomQuestion();
+  fizzyDrinks.forEach((randomQuestion) => {
     constructQuizCard(randomQuestion);
     if (randomQuestion.type === "trueFalse") {
       getTrueFalse(randomQuestion);
@@ -111,14 +116,8 @@ document.querySelector("#startQuizBtn").addEventListener("click", () => {
     } else {
       getCheck(randomQuestion);
     }
-  } else {
-    quizCards.innerHTML = "";
-    let finishTest = document.createElement("h3");
-    finishTest.innerText =
-      "Fizzy lizzy likes you quizy lets get down to the rizzultiez which iz";
-  }
-  console.log(results);
-});
+  });
+}
 
 //Funktioner
 
@@ -131,11 +130,6 @@ let constructQuizCard = (questions) => {
     `;
   quizCards.innerHTML = "";
   quizCards.append(quizDiv);
-};
-
-let getRandomQuestion = () => {
-  const randomIndex = Math.floor(Math.random() * fizzyDrinks.length);
-  return fizzyDrinks[randomIndex];
 };
 
 function getTrueFalse(question) {
@@ -163,6 +157,8 @@ function getRadio(question) {
     radioLabel.appendChild(radioBtn);
     radioLabel.appendChild(document.createTextNode(answer));
     quizCards.appendChild(radioLabel);
+
+    radioBtn.addEventListener("click", (e) => checkAnswer(e, question, answer));
   });
 }
 
@@ -177,6 +173,10 @@ function getCheck(question) {
     checkBoxLabel.appendChild(checkBoxes);
     checkBoxLabel.appendChild(document.createTextNode(answer));
     quizCards.appendChild(checkBoxLabel);
+
+    checkBoxes.addEventListener("click", (e) =>
+      checkAnswer(e, question, answer)
+    );
   });
 }
 
@@ -190,8 +190,9 @@ function checkAnswer(e, question, selectedAnswer) {
     results++;
     console.log("Current points" + results);
   }
-
+  getNextQuestion();
   console.log(results);
+  console.log(questionCounter);
 }
 
 //Exempel
@@ -248,3 +249,18 @@ mousePos.addEventListener("mousemove", (e) => {
 // function shuffle(array) {
 //   return array.sort(() => Math.random() - 0.5);
 // }
+
+// let getRandomQuestion = () => {
+//   if (questionCounter < 12) {
+//     const randomIndex = Math.floor(Math.random() * fizzyDrinks.length);
+//     questionCounter++;
+//     return fizzyDrinks[randomIndex];
+
+//   } else {
+//     alert("Quiz is finished");
+//     quizCards.innerHTML = "";
+//     let finishTest = document.createElement("h3");
+//     finishTest.innerText =
+//       "Fizzy lizzy likes you quizy lets get down to the rizzultiez which iz";
+//   }
+// };
