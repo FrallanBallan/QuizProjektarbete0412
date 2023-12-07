@@ -235,11 +235,11 @@ function displayAllQuestions() {
     let questionElement = document.createElement("div");
 
     let nameElement = document.createElement("span");
-    nameElement.textContent = `Question: ${questionObj.name}`;
+    nameElement.textContent = `Question: ${questionObj.name}. `;
     questionElement.appendChild(nameElement);
 
     let userAnswerDisplay = document.createElement("span");
-    userAnswerDisplay.textContent = `Your answer: ${questionObj.selectedAnswer}`;
+    userAnswerDisplay.textContent = ` Your answer: ${questionObj.selectedAnswer}`;
     questionElement.appendChild(userAnswerDisplay);
 
     questionsContainer.appendChild(questionElement);
