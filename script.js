@@ -99,12 +99,24 @@ let newDiv = document.createElement("div");
 let results = 0;
 let questionCounter = 0;
 
+let allQuestions = [];
+
 //Start knapp
 let startButton = document.querySelector("#startQuizBtn");
 
 //Next knapp
 let nextButton = document.querySelector("#nextButton");
 
+//Darkmode knapp och funkish
+let darkMode = document.querySelector("#darkmode");
+let body = document.body;
+
+darkMode.addEventListener("click", () => {
+  body.classList.toggle("darkMode");
+  document.querySelector("#lighty").classList.toggle("lightMouse");
+});
+
+//Next question funkish
 nextButton.addEventListener("click", getNextQuestion);
 nextButton.style.display = "none";
 
@@ -114,6 +126,7 @@ startButton.addEventListener("click", () => {
   results = 0;
   getNextQuestion();
   quizCards.style.backgroundColor = "";
+  document.querySelector("#allQuestionsContainer").innerHTML = "";
 });
 
 // Funktion som visar frågan baserad på if satser och skapar en div
@@ -126,6 +139,7 @@ function displayQuestion(question) {
   `;
   nextButton.style.display = "none";
   startButton.style.display = "none";
+
   // if sats för att hitta om frågan har en viss typ
   if (question.type === "trueFalse") {
     newDiv.innerHTML = "";
@@ -174,7 +188,10 @@ function checkAnswer(question, selectedAnswer) {
     });
     console.log(results);
   }
-
+  let object = {};
+  object["name"] = question.name;
+  object["selectedAnswer"] = selectedAnswer;
+  allQuestions.push(object);
   nextButton.style.display = "block";
 }
 
@@ -194,6 +211,7 @@ function displayResult() {
   } else if (percentAnswers >= 100) {
     quizCards.style.backgroundColor = "green";
   }
+  displayAllQuestions();
 }
 //funktion för next question
 function getNextQuestion() {
@@ -203,6 +221,41 @@ function getNextQuestion() {
   } else {
     displayResult();
   }
+}
+
+//Visa alla quiz cards
+function displayAllQuestions() {
+  let questionsContainer = document.querySelector("#allQuestionsContainer");
+  questionsContainer.innerHTML = "";
+
+  //Funktion på min globala array
+  allQuestions.forEach((questionObj) => {
+    let questionElement = document.createElement("div");
+
+    let nameElement = document.createElement("span");
+    nameElement.textContent = `Question: ${questionObj.name}`;
+    questionElement.appendChild(nameElement);
+
+    let userAnswerDisplay = document.createElement("span");
+    userAnswerDisplay.textContent = `Your answer: ${questionObj.selectedAnswer}`;
+    questionElement.appendChild(userAnswerDisplay);
+
+    questionsContainer.appendChild(questionElement);
+
+    if (questionObj === answer) {
+    }
+  });
+
+  // if (question.type === "trueFalse") {
+  //   userAnswerDisplay.textContent = ` - Your answer: ${question.selectedAnswer}`;
+  // } else if (question.type === "radio") {
+  //   userAnswerDisplay.textContent = ` - Your answer: ${question.selectedAnswer}`;
+  // } else if (question.type === "checkbox") {
+  //   userAnswerDisplay.textContent = ` - Your answer: ${question.selectedAnswer}`;
+  // }
+
+  questionElement.appendChild(userAnswerDisplay);
+  questionsContainer.appendChild(questionElement);
 }
 
 // // FÖRSTA TRY

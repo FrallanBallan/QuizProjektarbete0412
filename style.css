@@ -49,6 +49,7 @@ body {
 
 
 .mainWrap {
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -59,6 +60,11 @@ body {
     border: solid black 2px;
 
 }
+
+
+
+
+
 
 .quizWrap {
     border: solid white 2px;
@@ -98,4 +104,15 @@ body {
 .disabled {
     pointer-events: none;
     opacity: 0.1;
+}
+
+.darkMode {
+    --primaryBg: #333;
+    /* Darker background color */
+    --h1Color: #F2C14E;
+    /* Update text colors for dark mode */
+    --h2Color: #F4F1BB;
+    --h3Color: peachpuff;
+    --h4Color: #F1FFE7;
+    --pColor: #F1FFE7;
 }
