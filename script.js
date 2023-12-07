@@ -4,49 +4,49 @@ const fizzyDrinks = [
     name: "Coca-Cola",
     question: "Coca-Cola contains caffeine.",
     answer: ["true", "false"],
-    rigthAnswer: ["true"],
+    rightAnswer: ["true"],
     type: "trueFalse",
   },
   {
     name: "Pepsi",
     question: "Pepsi's original name was 'Brad's Drink'.",
     answer: ["true", "false"],
-    rigthAnswer: ["false"],
+    rightAnswer: ["false"],
     type: "trueFalse",
   },
   {
     name: "Sprite",
     question: "Sprite is a lemon-lime soda.",
     answer: ["true", "false"],
-    rigthAnswer: ["true"],
+    rightAnswer: ["true"],
     type: "trueFalse",
   },
   {
     name: "Fanta",
     question: "Fanta comes in flavors like orange and grape.",
     answer: ["true", "false"],
-    rigthAnswer: ["true"],
+    rightAnswer: ["true"],
     type: "trueFalse",
   },
   {
     name: "Mountain Dew",
     question: "Mountain Dew is a type of energy drink.",
     answer: ["true", "false"],
-    rigthAnswer: ["false"],
+    rightAnswer: ["false"],
     type: "trueFalse",
   },
   {
     name: "Dr. Pepper",
     question: "Dr. Pepper contains",
     answer: ["prune juice", "orange juice", "cherry juice", "cranberry juice"],
-    rigthAnswer: ["cherry juice"],
+    rightAnswer: ["cherry juice"],
     type: "radio",
   },
   {
     name: "Root Beer",
     question: "Root Beer is a type of ginger ale, name cities in Sweden.",
     answer: ["Stockholm", "Oslo", "Tokyo", "Stormwind"],
-    rigthAnswer: ["Stockholm"],
+    rightAnswer: ["Stockholm"],
     type: "radio",
   },
   {
@@ -54,14 +54,14 @@ const fizzyDrinks = [
     question:
       "Ginger Ale is known for its calming effect on the stomach, what else is good for mr stomach.",
     answer: ["Coca cola", "Mushrooms", "Banana", "Kanjang"],
-    rigthAnswer: ["Kanjang"],
+    rightAnswer: ["Kanjang"],
     type: "radio",
   },
   {
     name: "Club Soda",
     question: "Club Soda is a flavored soda, which one is a club?.",
     answer: ["Studio 64", "Nivå 22", "Café Opera", "Midsommarkransen"],
-    rigthAnswer: ["Studio 64"],
+    rightAnswer: ["Studio 64"],
     type: "radio",
   },
   {
@@ -69,7 +69,7 @@ const fizzyDrinks = [
     question:
       "Tonic Water is often used as a mixer in cocktails and is drinkable as it is. whats in a gin and tonic?",
     answer: ["Tonic", "Gin", "Grapejuice", "Pasta"],
-    rigthAnswer: ["Tonic", "Gin"],
+    rightAnswer: ["Tonic", "Gin"],
     type: "checkbox",
   },
   {
@@ -77,7 +77,7 @@ const fizzyDrinks = [
     question:
       "Sparkling Water is carbonated and is good for your teeth. what are the most common dentist names?",
     answer: ["Gordon", "Brandon", "Jordan", "Mank the tank"],
-    rigthAnswer: ["Mank the tank", "Jordan"],
+    rightAnswer: ["Mank the tank", "Jordan"],
     type: "checkbox",
   },
   {
@@ -85,7 +85,7 @@ const fizzyDrinks = [
     question:
       "Seltzer is a type of cola and smells like autumn. which ones here are jazz muscians",
     answer: ["Miles", "Mingus", "Mama Clara", "Mimirion"],
-    rigthAnswer: ["Miles", "Mingus"],
+    rightAnswer: ["Miles", "Mingus"],
     type: "checkbox",
   },
 ];
@@ -124,6 +124,7 @@ nextButton.style.display = "none";
 startButton.addEventListener("click", () => {
   questionCounter = 0;
   results = 0;
+  allQuestions = [];
   getNextQuestion();
   quizCards.style.backgroundColor = "";
   document.querySelector("#allQuestionsContainer").innerHTML = "";
@@ -178,7 +179,7 @@ function displayQuestion(question) {
 }
 
 function checkAnswer(question, selectedAnswer) {
-  if (question.rigthAnswer.includes(selectedAnswer)) {
+  if (question.rightAnswer.includes(selectedAnswer)) {
     results++;
   }
   questionCounter++;
@@ -191,6 +192,7 @@ function checkAnswer(question, selectedAnswer) {
   let object = {};
   object["name"] = question.name;
   object["selectedAnswer"] = selectedAnswer;
+  object["rightAnswer"] = question.rightAnswer;
   allQuestions.push(object);
   nextButton.style.display = "block";
 }
@@ -242,7 +244,10 @@ function displayAllQuestions() {
 
     questionsContainer.appendChild(questionElement);
 
-    if (questionObj === answer) {
+    if (questionObj.rightAnswer.includes(questionObj.selectedAnswer)) {
+      questionElement.style.background = "green";
+    } else {
+      questionElement.style.background = "red";
     }
   });
 
@@ -254,8 +259,10 @@ function displayAllQuestions() {
   //   userAnswerDisplay.textContent = ` - Your answer: ${question.selectedAnswer}`;
   // }
 
-  questionElement.appendChild(userAnswerDisplay);
-  questionsContainer.appendChild(questionElement);
+  // Kom ihåg
+  // questionElement.appendChild(userAnswerDisplay);
+  // questionsContainer.appendChild(questionElement);
+  // console.log(allQuestions);
 }
 
 // // FÖRSTA TRY
