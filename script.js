@@ -89,23 +89,32 @@ const fizzyDrinks = [
     type: "checkbox",
   },
 ];
-console.log(fizzyDrinks[3]);
 
 //Variablar
 
 let quizCards = document.querySelector(".cardWrap");
 let newDiv = document.createElement("div");
 //Question Counter
+
 let results = 0;
 let questionCounter = 0;
-
 let allQuestions = [];
 
 //Start knapp
 let startButton = document.querySelector("#startQuizBtn");
+startButton.addEventListener("click", () => {
+  questionCounter = 0;
+  results = 0;
+  allQuestions = [];
+  getNextQuestion();
+  quizCards.style.backgroundColor = "";
+  document.querySelector("#allQuestionsContainer").innerHTML = "";
+});
 
 //Next knapp
 let nextButton = document.querySelector("#nextButton");
+nextButton.addEventListener("click", getNextQuestion);
+nextButton.style.display = "none";
 
 //Darkmode knapp och funkish
 let darkMode = document.querySelector("#darkmode");
@@ -116,21 +125,7 @@ darkMode.addEventListener("click", () => {
   document.querySelector("#lighty").classList.toggle("lightMouse");
 });
 
-//Next question funkish
-nextButton.addEventListener("click", getNextQuestion);
-nextButton.style.display = "none";
-
-// Starta quiz
-startButton.addEventListener("click", () => {
-  questionCounter = 0;
-  results = 0;
-  allQuestions = [];
-  getNextQuestion();
-  quizCards.style.backgroundColor = "";
-  document.querySelector("#allQuestionsContainer").innerHTML = "";
-});
-
-// Funktion som visar frågan baserad på if satser och skapar en div
+// Visar en fråga baserad på dess typ. True/False, Radio button eller checkbox
 function displayQuestion(question) {
   let quizDiv = document.createElement("div");
   quizDiv.classList.add("quizCard");
@@ -178,11 +173,19 @@ function displayQuestion(question) {
   quizCards.appendChild(quizDiv);
 }
 
+//Kollar att spelaren valda svar stämmer med rättsvar och uppdaterar resultat
+//Svåraste var att få till att räkna checkbox som en fråga fick till en full if if
 function checkAnswer(question, selectedAnswer) {
-  if (question.rightAnswer.includes(selectedAnswer)) {
-    results++;
+  if (question.type === "checkbox") {
+    if (question.rightAnswer.includes(selectedAnswer)) {
+      results++;
+    }
+  } else {
+    if (question.rightAnswer.includes(selectedAnswer)) {
+      results++;
+    }
   }
-  questionCounter++;
+  // questionCounter++;
   if (!newDiv.firstChild.innerHTML.includes("checkbox")) {
     Array.from(newDiv.children).forEach((child) => {
       child.classList.add("disabled");
@@ -197,6 +200,20 @@ function checkAnswer(question, selectedAnswer) {
   nextButton.style.display = "block";
 }
 
+//Går vidare till nästa fråga eller visar resultatet om det inte finns fler frågor
+function getNextQuestion() {
+  if (questionCounter < fizzyDrinks.length) {
+    //Hittar index i fizzyDrinks baserat på questionCOunter som håller koll på dess index
+    displayQuestion(fizzyDrinks[questionCounter]);
+    questionCounter++;
+    console.log(questionCounter, results, allQuestions);
+  } else {
+    displayResult();
+    console.log(questionCounter, results, allQuestions);
+  }
+}
+
+//Visar spelarens resultat och sätter en färg baserad på procenthalten av rätt
 function displayResult() {
   let percentAnswers = (results / fizzyDrinks.length) * 100;
   quizCards.innerHTML = `
@@ -215,17 +232,8 @@ function displayResult() {
   }
   displayAllQuestions();
 }
-//funktion för next question
-function getNextQuestion() {
-  // questionCounter++;
-  if (questionCounter < fizzyDrinks.length) {
-    displayQuestion(fizzyDrinks[questionCounter]);
-  } else {
-    displayResult();
-  }
-}
 
-//Visa alla quiz cards
+//Visar alla frågor och byter färg på div om den är rätt eller fel
 function displayAllQuestions() {
   let questionsContainer = document.querySelector("#allQuestionsContainer");
   questionsContainer.innerHTML = "";
@@ -264,6 +272,13 @@ function displayAllQuestions() {
   // questionsContainer.appendChild(questionElement);
   // console.log(allQuestions);
 }
+
+// Museffekt
+let mousePos = document.documentElement;
+mousePos.addEventListener("mousemove", (e) => {
+  mousePos.style.setProperty("--x", e.clientX + "px");
+  mousePos.style.setProperty("--y", e.clientY + "px");
+});
 
 // // FÖRSTA TRY
 // document
@@ -403,13 +418,6 @@ function displayAllQuestions() {
 //Rendering
 
 //Poängställning
-
-// Museffekt
-let mousePos = document.documentElement;
-mousePos.addEventListener("mousemove", (e) => {
-  mousePos.style.setProperty("--x", e.clientX + "px");
-  mousePos.style.setProperty("--y", e.clientY + "px");
-});
 
 //Shuffle funktion
 // function shuffle(array) {
